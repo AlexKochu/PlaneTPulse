@@ -1,14 +1,11 @@
 # PlanetPulse 🌍
 
-## Hackathon
 
 **Code2Career AI Hackathon — Track 2 — Climate Tech**
 
 ## Hackathon ID
 
-> **TODO — INSERT FROM TEAM PAGE**
->
-> ⚠️ You must replace this with your actual Hackathon ID from the team page before submission.
+> AZIS-CKACFN
 
 ---
 
