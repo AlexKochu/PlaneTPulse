@@ -97,7 +97,7 @@ export default function LandingNav() {
         </div>
         
         {/* Desktop nav links */}
-        <div className="landing-nav-desktop" style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', justifyContent: 'center', flex: 1, flexWrap: 'nowrap', whiteSpace: 'nowrap' }}>
+        <div className="landing-nav-desktop" style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', justifyContent: 'center', flex: 1, flexWrap: 'nowrap', whiteSpace: 'nowrap' }}>
           {navLinks.map(link => (
             <Link
               key={link.id}
