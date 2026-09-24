@@ -25,6 +25,7 @@ import type {
 } from "@/lib/types";
 import CategoryChart from "@/components/CategoryChart";
 import WeeklyTrendChart from "@/components/WeeklyTrendChart";
+import WeeklyCoach from "@/components/WeeklyCoach";
 import { Reveal, HoverLift, CountUp } from "@/components/Motion";
 import LiveIndicator from "@/components/LiveIndicator";
 import { AlertTriangle, BarChart2, ClipboardList, PlusCircle, TrendingUp, Globe2, CloudRain, Sun } from 'lucide-react';
@@ -147,6 +148,7 @@ export default function DashboardPage() {
           </motion.div>
         )}
       </AnimatePresence>
+      <WeeklyCoach />
 
       <div className="dashboard-grid">
         <Reveal direction="up" delay={0.05} className="dashboard-grid-cell">

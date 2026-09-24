@@ -11,39 +11,39 @@
 :root,
 [data-theme="light"],
 [data-theme="dark"] {
-  /* Primary palette — restored to normal light green */
+  /* Primary palette */
   --color-white: #FFFFFF;
   --color-bg: #F6FAF7;
   --color-soft-green: #E8F4EC;
   --color-very-light-green: #F0F7F3;
-  --color-primary-green: #1F9D6B; /* Normal light green */
-  --color-deep-green: #0F3D2A; /* Used for dark text/elements */
+  --color-primary-green: #1F9D6B;
+  --color-deep-green: #0F3D2A;
   --color-emerald: #1F9D6B;
   --color-lime: #B7E36B;
   --color-sky-teal: #9ED4CE;
   --color-amber: #F59E0B;
 
-  /* Glass tokens (Light) */
-  --glass-bg: var(--color-bg); /* Completely opaque, same color as body container */
-  --glass-bg-hover: var(--color-bg);
-  --glass-border: rgba(31, 157, 107, 0.45); /* Visible border outline */
-  --glass-border-subtle: rgba(31, 157, 107, 0.25);
-  --glass-shadow: 0 8px 24px rgba(15, 61, 42, 0.12);
-  --glass-shadow-hover: 0 12px 32px rgba(15, 61, 42, 0.18);
-  --glass-inset: transparent;
-  --nav-glass-bg: rgba(246, 250, 247, 0.95);
+  /* Glass tokens */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-bg-hover: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(31, 157, 107, 0.2);
+  --glass-border-subtle: rgba(31, 157, 107, 0.12);
+  --glass-shadow: 0 8px 32px rgba(15, 61, 42, 0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+  --glass-shadow-hover: 0 16px 48px rgba(15, 61, 42, 0.12);
+  --glass-inset: inset 0 1px 0 rgba(255,255,255,0.9);
+  --nav-glass-bg: rgba(250, 253, 251, 0.88);
 
   /* Text */
-  --color-text: #0F3D2A; /* Dark green for text */
+  --color-text: #0F3D2A;
   --color-text-secondary: #2C5A47;
   --color-text-muted: #537D6B;
   --color-text-faint: #8BB09E;
 
   /* Neutrals & Cards */
-  --color-border: rgba(31, 157, 107, 0.25); /* Visible border outline */
-  --color-border-light: rgba(31, 157, 107, 0.15);
-  --color-surface: var(--color-bg); /* Same color for all containers */
-  --color-surface-hover: var(--color-white);
+  --color-border: rgba(31, 157, 107, 0.18);
+  --color-border-light: rgba(31, 157, 107, 0.10);
+  --color-surface: rgba(255, 255, 255, 0.75);
+  --color-surface-hover: rgba(255, 255, 255, 0.95);
 
   /* Category colors - warmer tones */
   --color-transport: #D3A796;
@@ -120,25 +120,43 @@ html {
 body {
   font-family: var(--font-sans);
   color: var(--color-text);
-  background: linear-gradient(-45deg, #F6FAF7, #E8F4EC, #F0F7F3, #F6FAF7);
-  background-size: 400% 400%;
-  animation: dynamicBackground 15s ease infinite;
+  /* Glossy white base — soft pearl shimmer */
+  background-color: #F6FAF7;
+  background-image:
+    radial-gradient(ellipse 120% 80% at 50% -10%, rgba(255,255,255,0.95) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 60% at 10% 50%, rgba(232,244,236,0.6) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 90% 80%, rgba(240,247,243,0.5) 0%, transparent 50%),
+    linear-gradient(160deg, #ffffff 0%, #f0f7f3 40%, #e8f4ec 70%, #f6faf7 100%);
+  background-attachment: fixed;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color var(--transition-base), color var(--transition-base);
+  position: relative;
 }
 
-@keyframes dynamicBackground {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+/* Glossy highlight sweep — top sheen */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40vh;
+  background: linear-gradient(180deg, rgba(255,255,255,0.55) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Subtle grain for glossy depth */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
 }
 
 a {
@@ -653,9 +671,10 @@ h5 { font-size: 1rem; }
    ============================================================ */
 .landing-page {
   min-height: 100vh;
-  background: var(--color-bg);
+  background: transparent;
   position: relative;
   overflow-x: hidden;
+  z-index: 1;
 }
 
 /* Landing Nav */
@@ -701,16 +720,19 @@ h5 { font-size: 1rem; }
 
 .nav-links {
   display: flex;
-  gap: var(--space-xl);
+  gap: var(--space-md);
   align-items: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
 }
 
 .nav-link {
-  font-size: 0.88rem;
-  font-weight: 400;
+  font-size: 0.82rem;
+  font-weight: 500;
   color: var(--color-text-secondary);
   transition: color var(--transition-fast);
-  padding: var(--space-sm) 0;
+  padding: var(--space-xs) 0;
+  white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -730,7 +752,7 @@ h5 { font-size: 1rem; }
   text-align: center;
   padding: var(--space-4xl) var(--space-xl);
   overflow: hidden;
-  background-color: var(--color-bg);
+  background-color: transparent;
 }
 
 .hero-bg-wrapper {
@@ -2354,10 +2376,14 @@ h5 { font-size: 1rem; }
 
 .card {
   background: var(--glass-bg);
-  border: 1.5px solid var(--glass-border);
+  border: 1.5px solid rgba(31, 157, 107, 0.35);
   border-radius: var(--radius-xl);
   padding: var(--space-xl);
-  box-shadow: var(--glass-shadow);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    0 2px 4px rgba(15, 61, 42, 0.05),
+    0 8px 20px rgba(15, 61, 42, 0.09),
+    0 20px 40px rgba(15, 61, 42, 0.07);
   transition: all var(--transition-base);
   position: relative;
   overflow: hidden;
@@ -2388,9 +2414,13 @@ h5 { font-size: 1rem; }
 
 .card:hover {
   background: var(--glass-bg-hover);
-  box-shadow: var(--glass-shadow-hover), inset 0 1px 0 var(--glass-inset);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.95),
+    0 4px 8px rgba(15, 61, 42, 0.08),
+    0 16px 36px rgba(15, 61, 42, 0.14),
+    0 32px 56px rgba(15, 61, 42, 0.08);
   transform: translateY(-2px);
-  border-color: var(--color-primary-green);
+  border-color: rgba(31, 157, 107, 0.55);
 }
 
 /* Mini category breakdown inside Total Footprint card */
@@ -3413,7 +3443,7 @@ h5 { font-size: 1rem; }
 }
 
 .target-input {
-  padding: 10px 16px;
+  padding: 10px 40px 10px 16px;
   border: 1.5px solid var(--color-border);
   border-radius: var(--radius-md);
   font-size: 1.1rem;
@@ -3425,8 +3455,30 @@ h5 { font-size: 1rem; }
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
+/* Custom arrow for select elements — replaces the browser default */
+select.target-input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+  cursor: pointer;
+}
+
+[data-theme="dark"] select.target-input {
+  background-color: rgba(8, 17, 12, 0.85);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #F8FAFC;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+}
+
 [data-theme="dark"] .target-input {
-  background: rgba(8, 17, 12, 0.85);
+  background-color: rgba(8, 17, 12, 0.85);
   border-color: rgba(16, 185, 129, 0.3);
   color: #F8FAFC;
 }

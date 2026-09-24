@@ -43,13 +43,14 @@ export default function LandingNav() {
       return { 
         backgroundColor: 'var(--color-primary-green)', 
         color: '#fff', 
-        padding: '6px 16px', 
+        padding: '5px 12px', 
         borderRadius: '999px',
-        fontSize: '0.9rem',
-        fontWeight: 500
+        fontSize: '0.82rem',
+        fontWeight: 600,
+        whiteSpace: 'nowrap' as const,
       };
     }
-    return { fontSize: '0.9rem', color: 'var(--color-text-secondary)', fontWeight: 500 };
+    return { fontSize: '0.82rem', color: 'var(--color-text-secondary)', fontWeight: 500, whiteSpace: 'nowrap' as const };
   };
 
   return (
@@ -81,7 +82,7 @@ export default function LandingNav() {
         </Link>
       </div>
       
-      <div className="nav-links" style={{ display: "flex", gap: "1.5rem", alignItems: "center", justifyContent: 'center', flex: 1 }}>
+      <div className="nav-links" style={{ display: "flex", gap: "1rem", alignItems: "center", justifyContent: 'center', flex: 1, flexWrap: 'nowrap', whiteSpace: 'nowrap', overflow: 'hidden' }}>
         <Link href="/#how-it-works" style={getLinkStyle('how-it-works')}>
           How It Works
         </Link>
@@ -91,8 +92,14 @@ export default function LandingNav() {
         <Link href="/#what-if" style={getLinkStyle('what-if')}>
           What If
         </Link>
+        <Link href="/app/coach" style={getLinkStyle('coach')}>
+          Ask Coach
+        </Link>
         <Link href="/app" style={getLinkStyle('dashboard')}>
           Dashboard
+        </Link>
+        <Link href="/#methodology" style={getLinkStyle('methodology')}>
+          Methodology
         </Link>
       </div>
 

@@ -14,6 +14,7 @@ export default function AppNav() {
     { href: "/app/log", label: "Log Activity", id: "nav-log" },
     { href: "/app/history", label: "History", id: "nav-history" },
     { href: "/what-if", label: "What If Simulator", id: "nav-what-if" },
+    { href: "/app/coach", label: "Ask Coach", id: "nav-coach" },
   ];
 
   return (

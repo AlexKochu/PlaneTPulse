@@ -41,7 +41,17 @@ export default function LandingPage() {
               </h1>
             </StaggerItem>
             <StaggerItem>
-              <p className="hero-subtitle" style={{ fontSize: '1.1rem', color: 'var(--color-text-secondary)', maxWidth: '600px', margin: '0 auto 2rem auto', fontWeight: 400 }}>
+              <p className="hero-subtitle" style={{
+                fontSize: '1.25rem',
+                fontFamily: 'var(--font-serif)',
+                fontStyle: 'italic',
+                color: '#050e09',
+                maxWidth: '620px',
+                margin: '0 auto 2rem auto',
+                fontWeight: 400,
+                lineHeight: 1.7,
+                letterSpacing: '0.01em',
+              }}>
                 Track the carbon behind your everyday choices, understand where it comes from, and turn small changes into measurable impact.
               </p>
             </StaggerItem>
@@ -60,13 +70,15 @@ export default function LandingPage() {
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'space-between', 
-                backgroundColor: 'rgba(255, 255, 255, 0.9)', 
-                backdropFilter: 'blur(10px)',
+                backgroundColor: 'rgba(255, 255, 255, 0.75)', 
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
                 borderRadius: '16px',
                 padding: '24px 48px',
                 maxWidth: '900px',
                 margin: '0 auto',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+                boxShadow: '0 8px 32px rgba(15,61,42,0.08), inset 0 1px 0 rgba(255,255,255,0.9)',
+                border: '1px solid rgba(31,157,107,0.15)',
                 textAlign: 'left'
               }}>
                 <div>
@@ -522,8 +534,155 @@ export default function LandingPage() {
       </JourneySection>
 
       {/* ============================================================
-          Section 6 — Final CTA
+          Section 7 — Methodology
           ============================================================ */}
+      <JourneySection className="landing-section" id="methodology" data-testid="methodology-section">
+        <div className="landing-section-inner">
+          <div className="landing-section-glass-pod">
+            <div className="section-ambient-glow section-ambient-glow-1" />
+            <div className="section-ambient-glow section-ambient-glow-2" />
+
+            <Reveal direction="up">
+              <span className="section-label">Transparency</span>
+              <h2 className="section-title">Our Methodology</h2>
+              <p className="section-subtitle">
+                Every CO₂ number in PlanetPulse is deterministic — computed from fixed, peer-reviewed
+                emission factors. No estimates, no ML guesses, no black boxes.
+              </p>
+            </Reveal>
+
+            {/* Core formula */}
+            <Reveal direction="up" delay={0.1}>
+              <div style={{
+                margin: '2.5rem 0',
+                padding: '1.75rem 2rem',
+                background: 'rgba(31,157,107,0.06)',
+                border: '1.5px solid rgba(31,157,107,0.25)',
+                borderRadius: '16px',
+                textAlign: 'center',
+              }}>
+                <p style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.1em', color: 'var(--color-primary-green)', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
+                  Core Formula
+                </p>
+                <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: 'var(--color-text)', fontWeight: 400, letterSpacing: '-0.01em' }}>
+                  CO₂ (kg) = Quantity × Emission Factor
+                </p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginTop: '0.5rem' }}>
+                  Calculated client-side in real time — rounded to 2 decimal places per activity log
+                </p>
+              </div>
+            </Reveal>
+
+            {/* Emission factors table */}
+            <Reveal direction="up" delay={0.15}>
+              <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-text)', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
+                Fixed Emission Factors
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '0.75rem', marginBottom: '2.5rem' }}>
+                {[
+                  { activity: 'Car', Icon: Car, factor: '0.20 kg CO₂ / km', category: 'Transport', note: 'Average petrol car', color: '#D3A796' },
+                  { activity: 'Bus', Icon: Bus, factor: '0.08 kg CO₂ / km', category: 'Transport', note: 'Public transit, shared load', color: '#D3A796' },
+                  { activity: 'Flight', Icon: Plane, factor: '0.25 kg CO₂ / km', category: 'Transport', note: 'Economy class, radiative forcing', color: '#D3A796' },
+                  { activity: 'Electricity', Icon: Zap, factor: '0.80 kg CO₂ / kWh', category: 'Energy', note: 'Average grid intensity', color: '#E3CDA4' },
+                  { activity: 'Veg Meal', Icon: Salad, factor: '0.50 kg CO₂ / meal', category: 'Food', note: 'Plant-based, low-land-use', color: '#C2D5B7' },
+                  { activity: 'Non-Veg Meal', Icon: Drumstick, factor: '2.00 kg CO₂ / meal', category: 'Food', note: 'Meat-heavy, livestock emissions', color: '#DCA29A' },
+                ].map((row) => (
+                  <div key={row.activity} style={{
+                    padding: '1rem 1.25rem',
+                    background: 'rgba(255,255,255,0.75)',
+                    backdropFilter: 'blur(12px)',
+                    border: '1.5px solid rgba(31,157,107,0.18)',
+                    borderRadius: '12px',
+                    boxShadow: '0 2px 8px rgba(15,61,42,0.05)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1rem',
+                  }}>
+                    <div style={{
+                      width: 40, height: 40, borderRadius: '10px', flexShrink: 0,
+                      background: `${row.color}22`,
+                      border: `1px solid ${row.color}55`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <row.Icon size={18} color={row.color} />
+                    </div>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
+                        <span style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)' }}>{row.activity}</span>
+                        <span style={{ fontSize: '0.65rem', fontWeight: 600, color: 'var(--color-primary-green)', background: 'var(--color-soft-green)', padding: '0.15rem 0.5rem', borderRadius: '999px', letterSpacing: '0.05em' }}>{row.category}</span>
+                      </div>
+                      <p style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--color-primary-green)', margin: '0 0 0.15rem' }}>{row.factor}</p>
+                      <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', margin: 0 }}>{row.note}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+
+            {/* Data sources + transparency */}
+            <Reveal direction="up" delay={0.2}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+                {[
+                  { Icon: Cpu,       title: 'Deterministic Engine',  body: 'All calculations run in-browser using the formula: CO₂ = quantity × factor. No server-side inference, no rounding drift between sessions.' },
+                  { Icon: Globe,     title: 'IPCC / DEFRA Sources',  body: 'Emission factors are sourced from IPCC AR6 Working Group III and the UK DEFRA GHG Conversion Factors — the global standard for consumer carbon accounting.' },
+                  { Icon: Zap,       title: 'AI Never Calculates',   body: 'The Groq AI coach only generates natural-language insights. It receives pre-computed verified numbers — it cannot alter, estimate, or override any CO₂ value.' },
+                  { Icon: BarChart2, title: 'Weekly Aggregation',    body: 'Weekly totals are summed Monday–Sunday from localStorage activity logs. The target comparison is a simple arithmetic check: total > target → exceeded.' },
+                ].map((item) => (
+                  <div key={item.title} style={{
+                    padding: '1.25rem',
+                    background: 'rgba(255,255,255,0.65)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1.5px solid rgba(31,157,107,0.15)',
+                    borderRadius: '14px',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 16px rgba(15,61,42,0.06)',
+                  }}>
+                    <div style={{
+                      width: 36, height: 36, borderRadius: '9px', marginBottom: '0.85rem',
+                      background: 'rgba(31,157,107,0.1)', border: '1px solid rgba(31,157,107,0.2)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <item.Icon size={17} color="var(--color-primary-green)" />
+                    </div>
+                    <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--color-text)', margin: '0 0 0.4rem' }}>{item.title}</h4>
+                    <p style={{ fontSize: '0.83rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.6 }}>{item.body}</p>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+
+            {/* Callout */}
+            <Reveal direction="up" delay={0.25}>
+              <div style={{
+                marginTop: '2rem',
+                padding: '1rem 1.5rem',
+                background: 'rgba(31,157,107,0.05)',
+                border: '1px solid rgba(31,157,107,0.18)',
+                borderRadius: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                flexWrap: 'wrap',
+              }}>
+                <div style={{ width: 32, height: 32, borderRadius: '8px', background: 'rgba(31,157,107,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Compass size={16} color="var(--color-primary-green)" />
+                </div>
+                <p style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', margin: 0, lineHeight: 1.5 }}>
+                  <strong>Fully transparent:</strong> The emission factors are hardcoded constants visible in{' '}
+                  <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', background: 'rgba(31,157,107,0.1)', padding: '0.1rem 0.35rem', borderRadius: '4px' }}>
+                    lib/calculations.ts
+                  </code>{' '}
+                  — every number you see is traceable to a single multiplication: quantity × factor.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </JourneySection>
+
+
+
+
+
       <JourneySection className="cta-section" data-testid="cta-section">
         <Reveal direction="up">
           <h2>Small choices become visible <em style={{ fontFamily: "'Instrument Serif', serif", fontStyle: 'italic' }}>change.</em></h2>
