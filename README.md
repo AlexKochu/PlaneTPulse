@@ -37,9 +37,8 @@
 
 | Service | URL |
 |---------|-----|
-| **Frontend** (Vercel) | [`https://plane-t-pulse.vercel.app`](https://plane-t-pulse.vercel.app) |
-| **Backend API** (Render) | [`https://planetpulse-backend.onrender.com`](https://planetpulse-backend.onrender.com) |
-| **API Docs** (Swagger) | [`https://planetpulse-backend.onrender.com/docs`](https://planetpulse-backend.onrender.com/docs) |
+| **Live**  | [`https://plane-t-pulse.vercel.app`](https://plane-t-pulse.vercel.app) |
+
 
 > **No login required.** Open the frontend URL and start using all features immediately.
 
