@@ -48,10 +48,10 @@ def call_groq_llm(prompt: str, chat_history: Optional[list] = None) -> Optional[
         messages.append({"role": "user", "content": prompt})
 
         completion = client.chat.completions.create(
-            model="openai/gpt-oss-120b",
+            model="qwen/qwen3.8-27b",
             messages=messages,
             temperature=0.7,
-            max_tokens=250
+            max_tokens=512
         )
         return completion.choices[0].message.content
     except Exception as e:
