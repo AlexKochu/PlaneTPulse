@@ -4,11 +4,12 @@ from datetime import datetime, timedelta
 from app.models.activity import Activity
 from app.models.target import Target
 from app.services.simulation_service import simulate
+from app.core.config import settings
 from sqlalchemy import func
 from typing import Optional, Dict, Any
 from groq import Groq
 
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+GROQ_API_KEY = settings.GROQ_API_KEY or os.environ.get("GROQ_API_KEY", "")
 
 SWAP_MAP = {
     "car": ("bus", 1.0),
@@ -47,7 +48,7 @@ def call_groq_llm(prompt: str, chat_history: Optional[list] = None) -> Optional[
         messages.append({"role": "user", "content": prompt})
 
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-120b",
             messages=messages,
             temperature=0.7,
             max_tokens=250

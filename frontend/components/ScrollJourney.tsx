@@ -36,7 +36,7 @@ export default function ScrollJourney() {
   const dotRef = useRef<SVGCircleElement>(null);
 
   useEffect(() => {
-    return smoothProgress.onChange((v) => {
+    return smoothProgress.on("change", (v) => {
       if (pathRef.current && dotRef.current) {
         const totalLength = pathRef.current.getTotalLength();
         if (totalLength) {
