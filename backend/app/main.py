@@ -12,9 +12,15 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Parse comma-separated origins from FRONTEND_URL env var
+# e.g. "https://planetpulse.vercel.app,https://planetpulse-git-main.vercel.app"
+_raw_origins = settings.FRONTEND_URL or "http://localhost:3000"
+ALLOWED_ORIGINS = [o.strip() for o in _raw_origins.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.FRONTEND_URL],
+    allow_origins=ALLOWED_ORIGINS,
+    allow_origin_regex=r"https://.*\.vercel\.app",  # allow all Vercel preview URLs
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
