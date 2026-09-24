@@ -40,7 +40,7 @@
 | **Live**  | [`https://plane-t-pulse.vercel.app`](https://plane-t-pulse.vercel.app) |
 
 
-> **No login required.** Open the frontend URL and start using all features immediately.
+> **No login required.** Open the URL and start using all features immediately.
 
 ---
 
