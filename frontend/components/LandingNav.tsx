@@ -43,14 +43,14 @@ export default function LandingNav() {
       return { 
         backgroundColor: 'var(--color-primary-green)', 
         color: '#fff', 
-        padding: '5px 12px', 
+        padding: '5px 10px', 
         borderRadius: '999px',
-        fontSize: '0.82rem',
+        fontSize: '0.78rem',
         fontWeight: 600,
         whiteSpace: 'nowrap' as const,
       };
     }
-    return { fontSize: '0.82rem', color: 'var(--color-text-secondary)', fontWeight: 500, whiteSpace: 'nowrap' as const };
+    return { fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 500, whiteSpace: 'nowrap' as const };
   };
 
   return (
@@ -76,13 +76,13 @@ export default function LandingNav() {
         justifyContent: 'space-between'
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+      <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
         <Link href="/" className="logo-link">
           <PlanetPulseLogo size="sm" />
         </Link>
       </div>
       
-      <div className="nav-links" style={{ display: "flex", gap: "1rem", alignItems: "center", justifyContent: 'center', flex: 1, flexWrap: 'nowrap', whiteSpace: 'nowrap', overflow: 'hidden' }}>
+      <div className="nav-links" style={{ display: "flex", gap: "0.5rem", alignItems: "center", justifyContent: 'center', flex: 1, flexWrap: 'nowrap', whiteSpace: 'nowrap' }}>
         <Link href="/#how-it-works" style={getLinkStyle('how-it-works')}>
           How It Works
         </Link>
@@ -103,8 +103,8 @@ export default function LandingNav() {
         </Link>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '12px', flex: 1 }}>
-        {/* Removed extra buttons as requested */}
+      <div style={{ flexShrink: 0, width: '40px' }}>
+        {/* Spacer for balance */}
       </div>
     </nav>
   );
