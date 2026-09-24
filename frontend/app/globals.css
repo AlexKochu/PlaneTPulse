@@ -120,11 +120,25 @@ html {
 body {
   font-family: var(--font-sans);
   color: var(--color-text);
-  background: var(--color-bg);
+  background: linear-gradient(-45deg, #F6FAF7, #E8F4EC, #F0F7F3, #F6FAF7);
+  background-size: 400% 400%;
+  animation: dynamicBackground 15s ease infinite;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+@keyframes dynamicBackground {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 a {
