@@ -47,7 +47,7 @@ def call_groq_llm(prompt: str, chat_history: Optional[list] = None) -> Optional[
         messages.append({"role": "user", "content": prompt})
 
         completion = client.chat.completions.create(
-            model="openai/gpt-oss-120b",
+            model="llama-3.3-70b-versatile",
             messages=messages,
             temperature=0.7,
             max_tokens=250

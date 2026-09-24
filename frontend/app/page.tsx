@@ -22,35 +22,62 @@ export default function LandingPage() {
       <JourneySection className="hero" data-testid="hero-section">
         <HeroLivingScene />
         
-        <div className="hero-content" style={{ zIndex: 10 }}>
+        <div className="hero-content" style={{ zIndex: 10, position: 'relative' }}>
+          {/* Text-contrast overlay — darkens only the central text area */}
+          <div style={{
+            position: 'absolute',
+            inset: '-60px -80px',
+            background: 'radial-gradient(ellipse at 50% 45%, rgba(4,14,8,0.55) 0%, rgba(4,14,8,0.25) 55%, transparent 80%)',
+            pointerEvents: 'none',
+            zIndex: 0,
+          }} />
           <Reveal direction="up" delay={0.1}>
-            <div className="hero-badge-container" style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', backgroundColor: 'var(--color-soft-green)', borderRadius: '999px' }}>
-                <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-primary-green)' }}></div>
-                <span style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.05em', color: 'var(--color-primary-green)', textTransform: 'uppercase' }}>
+            <div className="hero-badge-container" style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px', position: 'relative', zIndex: 2 }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', backgroundColor: 'rgba(30,80,50,0.75)', backdropFilter: 'blur(8px)', border: '1px solid rgba(120,220,160,0.45)', borderRadius: '999px' }}>
+                <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#6ee7a0' }}></div>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.05em', color: '#9DF5C0', textTransform: 'uppercase' }}>
                   Carbon Footprint Tracker
                 </span>
               </div>
             </div>
           </Reveal>
           
+          <div style={{ position: 'relative', zIndex: 2 }}>
           <StaggerContainer delay={0.2} staggerChildren={0.15}>
             <StaggerItem>
-              <h1 className="hero-title" style={{ fontFamily: 'var(--font-serif)', fontSize: '4.5rem', fontWeight: 400, color: 'var(--color-text)', lineHeight: 1.1, marginBottom: '24px' }}>
-                Every choice leaves a <em style={{ color: 'var(--color-primary-green)', fontStyle: 'italic' }}>footprint.</em>
+              <h1 className="hero-title" style={{
+                fontFamily: 'var(--font-serif)',
+                fontSize: '4.5rem',
+                fontWeight: 400,
+                color: '#ffffff',
+                lineHeight: 1.1,
+                marginBottom: '24px',
+                position: 'relative',
+                zIndex: 2,
+                textShadow: '0 2px 24px rgba(0,0,0,0.7), 0 1px 4px rgba(0,0,0,0.9)',
+              }}>
+                Every choice leaves a{' '}
+                <em style={{
+                  color: '#6ee7a0',
+                  fontStyle: 'italic',
+                  textShadow: '0 0 32px rgba(80,210,120,0.6), 0 2px 12px rgba(0,0,0,0.8)',
+                }}>footprint.</em>
               </h1>
             </StaggerItem>
             <StaggerItem>
               <p className="hero-subtitle" style={{
-                fontSize: '1.25rem',
+                fontSize: '1.2rem',
                 fontFamily: 'var(--font-serif)',
                 fontStyle: 'italic',
-                color: '#050e09',
+                color: 'rgba(235, 252, 243, 0.95)',
                 maxWidth: '620px',
                 margin: '0 auto 2rem auto',
-                fontWeight: 400,
+                fontWeight: 500,
                 lineHeight: 1.7,
                 letterSpacing: '0.01em',
+                position: 'relative',
+                zIndex: 2,
+                textShadow: '0 1px 12px rgba(0,0,0,0.85), 0 2px 24px rgba(0,0,0,0.6)',
               }}>
                 Track the carbon behind your everyday choices, understand where it comes from, and turn small changes into measurable impact.
               </p>
@@ -100,6 +127,7 @@ export default function LandingPage() {
               </div>
             </StaggerItem>
           </StaggerContainer>
+          </div>
         </div>
         
         <svg className="hero-pulse-line" viewBox="0 0 1000 100" style={{ position: 'absolute', bottom: '15%', width: '100%', stroke: 'var(--color-emerald)', fill: 'none', strokeWidth: 2, zIndex: 5, pointerEvents: 'none', opacity: 0.5 }}>

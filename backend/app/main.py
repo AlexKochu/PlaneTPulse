@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+`from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import activities, dashboard, targets, simulator, coach
 from app.core.config import settings
