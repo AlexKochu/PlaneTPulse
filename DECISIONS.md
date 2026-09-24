@@ -11,7 +11,8 @@ Features are graded **by script** (direct API calls), not by a browser agent dri
 
 | Environment | URL |
 |---|---|
-| Production (Render) | `https://planetpulse-backend.onrender.com` |
+| Frontend (Vercel) | `https://plane-t-pulse.vercel.app` |
+| Backend (Render) | `https://planetpulse-backend.onrender.com` |
 | Local development | `http://localhost:8000` |
 | Swagger / OpenAPI docs | `https://planetpulse-backend.onrender.com/docs` |
 
@@ -84,8 +85,7 @@ GET /api/dashboard
 |---|---|---|
 | `car` | 0.20 | kg CO2 / km |
 | `bus` | 0.08 | kg CO2 / km |
-| `flight_domestic` | 0.25 | kg CO2 / km |
-| `flight_long` | 0.195 | kg CO2 / km |
+| `flight` | 0.25 | kg CO2 / km |
 | `electricity` | 0.80 | kg CO2 / kWh |
 | `veg_meal` | 0.50 | kg CO2 / meal |
 | `non_veg_meal` | 2.00 | kg CO2 / meal |
@@ -136,8 +136,7 @@ PlanetPulse applies **per-activity-type thresholds** across two levels:
 |---|---|---|---|---|
 | Car | km | 1,000 | 50,000 | Earth circumference ~40,075 km — driving more in a single trip is physically impossible |
 | Bus | km | 1,000 | 50,000 | Same reasoning as car |
-| Flight (domestic) | km | 15,000 | 50,000 | Longest commercial flights are ~18,000 km |
-| Flight (long-haul) | km | 15,000 | 50,000 | Same as above |
+| Flight | km | 15,000 | 50,000 | Longest commercial flights are ~18,000 km |
 | Electricity | kWh | 500 | 100,000 | Average US household uses ~900 kWh/month; >500 kWh in one entry warrants a check |
 | Veg Meal | meals | 20 | 100 | More than 20 meals in a single log entry is highly unusual |
 | Non-Veg Meal | meals | 20 | 100 | Same reasoning as veg meal |
