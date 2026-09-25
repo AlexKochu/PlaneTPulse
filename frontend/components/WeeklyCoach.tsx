@@ -6,6 +6,7 @@ import { MessageSquare, ArrowRight, Zap, TrendingDown, RefreshCw } from "lucide-
 import { useRouter } from "next/navigation";
 import { Reveal, HoverLift } from "@/components/Motion";
 import { getCurrentWeekActivities, getCurrentWeekTotal, getWeeklyTarget } from "@/lib/storage";
+import { API_BASE_URL } from "@/lib/apiConfig";
 
 export default function WeeklyCoach() {
   const [loading, setLoading] = useState(false);
@@ -15,7 +16,6 @@ export default function WeeklyCoach() {
   const handleAskCoach = async () => {
     setLoading(true);
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
       
       // 1. Gather deterministic verified summary from current week
       const weekActivities = getCurrentWeekActivities();
@@ -65,22 +65,37 @@ export default function WeeklyCoach() {
         };
       }
 
-      const res = await fetch(`${API_URL}/api/coach`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      // Try FastAPI backend first, fall back to internal Next.js /api/coach route
+      const primaryUrl = API_BASE_URL
+        ? `${API_BASE_URL}/api/coach`
+        : "/api/coach";
 
-      if (!res.ok) {
-        // Fallback to GET if POST isn't supported
-        const getRes = await fetch(`${API_URL}/api/coach`);
-        if (!getRes.ok) throw new Error("Failed to fetch coach data");
-        const data = await getRes.json();
-        setCoachData(data);
-      } else {
-        const data = await res.json();
-        setCoachData(data);
+      let res: Response | null = null;
+      try {
+        res = await fetch(primaryUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } catch {
+        // Primary failed (network error) — try internal route as fallback
       }
+
+      if ((!res || !res.ok) && primaryUrl !== "/api/coach") {
+        try {
+          res = await fetch("/api/coach", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+        } catch {
+          // fallback also failed
+        }
+      }
+
+      if (!res || !res.ok) throw new Error("Failed to fetch coach data");
+      const data = await res.json();
+      setCoachData(data);
     } catch (err) {
       console.error("Coach fetch error:", err);
       // Client-side fallback if backend is unreachable

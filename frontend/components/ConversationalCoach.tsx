@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { getCurrentWeekActivities, getCurrentWeekTotal, getWeeklyTarget } from "@/lib/storage";
+import { API_BASE_URL } from "@/lib/apiConfig";
 
 interface Message {
   role: "user" | "assistant";
@@ -102,8 +103,6 @@ export default function ConversationalCoach() {
     setStarted(true);
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-
       // Build verified deterministic data from client
       const verifiedData = buildVerifiedData();
 
@@ -119,13 +118,35 @@ export default function ConversationalCoach() {
         chat_history: historyForBackend.length > 0 ? historyForBackend : null,
       };
 
-      const res = await fetch(`${API_URL}/api/coach`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      // Try FastAPI backend first, fall back to internal Next.js /api/coach route
+      const primaryUrl = API_BASE_URL
+        ? `${API_BASE_URL}/api/coach`
+        : "/api/coach";
 
-      if (!res.ok) throw new Error(`API error: ${res.status}`);
+      let res: Response | null = null;
+      try {
+        res = await fetch(primaryUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } catch {
+        // Primary failed (network error) — try internal route as fallback
+      }
+
+      if ((!res || !res.ok) && primaryUrl !== "/api/coach") {
+        try {
+          res = await fetch("/api/coach", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+        } catch {
+          // fallback also failed
+        }
+      }
+
+      if (!res || !res.ok) throw new Error(`API error: ${res?.status || "network"}`);
       const data = await res.json();
 
       const assistantMsg: Message = {

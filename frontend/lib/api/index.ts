@@ -1,6 +1,8 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-
+import { API_BASE_URL } from "../apiConfig";
 import { ActivityType } from "../types";
+
+const API_URL = API_BASE_URL;
+
 
 export async function createActivity(activityType: string, category: string, quantity: number, unit: string, date: string) {
   const res = await fetch(`${API_URL}/api/activities`, {
