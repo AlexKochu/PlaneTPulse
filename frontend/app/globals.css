@@ -3375,6 +3375,65 @@ h5 { font-size: 1rem; }
   font-size: 0.85rem;
 }
 
+.btn-delete-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--color-danger);
+  background: var(--color-danger-light);
+  border: 1px solid rgba(190, 88, 63, 0.25);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-delete-row:hover:not(:disabled) {
+  background: var(--color-danger);
+  color: #ffffff;
+  border-color: var(--color-danger);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(190, 88, 63, 0.25);
+}
+
+.btn-delete-row:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-delete-mobile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0;
+  color: var(--color-danger);
+  background: var(--color-danger-light);
+  border: 1px solid rgba(190, 88, 63, 0.25);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  touch-action: manipulation;
+}
+
+.btn-delete-mobile:hover:not(:disabled),
+.btn-delete-mobile:active:not(:disabled) {
+  background: var(--color-danger);
+  color: #ffffff;
+  border-color: var(--color-danger);
+}
+
+.btn-delete-mobile:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* History cards (mobile) */
 .history-cards {
   display: none;

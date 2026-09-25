@@ -14,6 +14,9 @@ import {
   getActivityDateString,
 } from './week';
 
+import { API_BASE_URL } from './apiConfig';
+import { createActivity, deleteActivity as deleteBackendActivity, getActivities } from './api';
+
 const STORAGE_KEYS = {
   ACTIVITIES: 'planetpulse_activities',
   WEEKLY_TARGET: 'planetpulse_weekly_target',
@@ -88,7 +91,114 @@ export function saveActivity(
 
   notifyStorageChange();
 
+  // Async backend sync if API URL is configured
+  if (typeof window !== 'undefined' && API_BASE_URL) {
+    createActivity(activityType, config.category, quantity, config.unit, activityDate)
+      .then((backendActivity) => {
+        if (backendActivity?.id) {
+          const stored = getAllActivities();
+          const found = stored.find(a => a.id === record.id);
+          if (found) {
+            found.backendId = backendActivity.id;
+            localStorage.setItem(STORAGE_KEYS.ACTIVITIES, JSON.stringify(stored));
+          }
+        }
+      })
+      .catch((err) => {
+        console.warn("Backend activity sync skipped/failed:", err);
+      });
+  }
+
   return record;
+}
+
+/**
+ * Helper to delete an activity record from the backend database if configured.
+ */
+async function deleteBackendActivityRecord(record: ActivityRecord): Promise<void> {
+  if (!API_BASE_URL) return;
+
+  try {
+    if (record.backendId) {
+      await deleteBackendActivity(record.backendId);
+      return;
+    }
+
+    const numericId = parseInt(record.id, 10);
+    if (!isNaN(numericId) && String(numericId) === record.id) {
+      await deleteBackendActivity(numericId);
+      return;
+    }
+
+    // If no backendId is attached, look up activity by attributes on backend
+    const backendList = await getActivities(record.activityType).catch(() => []);
+    if (Array.isArray(backendList)) {
+      const match = backendList.find(
+        (b: any) =>
+          b.activity_type === record.activityType &&
+          Math.abs(b.quantity - record.quantity) < 0.001 &&
+          (!record.date || b.date === record.date)
+      );
+      if (match?.id) {
+        await deleteBackendActivity(match.id);
+      }
+    }
+  } catch (e) {
+    console.warn("deleteBackendActivityRecord error:", e);
+  }
+}
+
+/**
+ * Delete an activity by ID.
+ * Removes the activity from localStorage and dispatches storage change event
+ * so that Dashboard totals and other views immediately recalculate.
+ * Also removes the activity from the production backend/database if available.
+ */
+export function deleteActivity(id: string): ActivityRecord | null {
+  if (typeof window === 'undefined') return null;
+
+  const activities = getAllActivities();
+  const index = activities.findIndex(a => a.id === id);
+  if (index === -1) return null;
+
+  const [deleted] = activities.splice(index, 1);
+  localStorage.setItem(STORAGE_KEYS.ACTIVITIES, JSON.stringify(activities));
+  notifyStorageChange();
+
+  // Async backend removal if API URL is configured
+  if (API_BASE_URL) {
+    deleteBackendActivityRecord(deleted).catch(err => {
+      console.warn("Backend deletion non-fatal notice:", err);
+    });
+  }
+
+  return deleted;
+}
+
+/**
+ * Async version of deleteActivity that awaits backend removal.
+ */
+export async function deleteActivityAsync(id: string): Promise<ActivityRecord | null> {
+  if (typeof window === 'undefined') return null;
+
+  const activities = getAllActivities();
+  const index = activities.findIndex(a => a.id === id);
+  if (index === -1) return null;
+
+  const [deleted] = activities.splice(index, 1);
+  localStorage.setItem(STORAGE_KEYS.ACTIVITIES, JSON.stringify(activities));
+  notifyStorageChange();
+
+  // Backend removal
+  if (API_BASE_URL) {
+    try {
+      await deleteBackendActivityRecord(deleted);
+    } catch (err) {
+      console.warn("Backend deletion notice:", err);
+    }
+  }
+
+  return deleted;
 }
 
 /**

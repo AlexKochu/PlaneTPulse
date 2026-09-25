@@ -36,6 +36,7 @@ export interface ActivityRecord {
   timestamp: string; // ISO string (creation time)
   date?: string;      // YYYY-MM-DD (stored activity date)
   createdAt?: string; // Optional creation timestamp fallback
+  backendId?: number; // Backend database ID when synced
 }
 
 export interface WeeklyTarget {

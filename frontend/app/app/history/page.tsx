@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { getFilteredActivities, type ActivityFilter } from "@/lib/storage";
+import { getFilteredActivities, deleteActivityAsync, type ActivityFilter } from "@/lib/storage";
 import { ACTIVITY_CONFIGS, ACTIVITY_TYPES } from "@/lib/calculations";
 import { formatTimestamp } from "@/lib/week";
 import type { ActivityRecord, ActivityType } from "@/lib/types";
 import { motion, AnimatePresence } from "framer-motion";
 import LiveIndicator from "@/components/LiveIndicator";
-import { Search } from 'lucide-react';
+import { Search, Trash2 } from 'lucide-react';
 
 export default function HistoryPage() {
   const [activities, setActivities] = useState<ActivityRecord[]>([]);
@@ -18,10 +18,40 @@ export default function HistoryPage() {
     endDate: "",
   });
   const [mounted, setMounted] = useState(false);
+  const [activityToDelete, setActivityToDelete] = useState<ActivityRecord | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const loadData = useCallback(() => {
     setActivities(getFilteredActivities(filter));
   }, [filter]);
+
+  // Handle Escape key to dismiss confirmation dialog
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && activityToDelete && !isDeleting) {
+        setActivityToDelete(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activityToDelete, isDeleting]);
+
+  const handleConfirmDelete = async () => {
+    if (!activityToDelete) return;
+    setIsDeleting(true);
+    try {
+      await deleteActivityAsync(activityToDelete.id);
+      loadData();
+    } finally {
+      setIsDeleting(false);
+      setActivityToDelete(null);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    if (isDeleting) return;
+    setActivityToDelete(null);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -196,6 +226,7 @@ export default function HistoryPage() {
                   <th scope="col">Quantity</th>
                   <th scope="col">Unit</th>
                   <th scope="col">CO₂</th>
+                  <th scope="col" style={{ textAlign: "right" }}>Actions</th>
                 </tr>
               </thead>
               <tbody data-testid="history-list">
@@ -222,6 +253,19 @@ export default function HistoryPage() {
                         <td>{activity.unit}</td>
                         <td className="history-co2">
                           {activity.co2Kg.toFixed(2)} kg
+                        </td>
+                        <td style={{ textAlign: "right" }}>
+                          <button
+                            type="button"
+                            className="btn-delete-row"
+                            onClick={() => setActivityToDelete(activity)}
+                            title={`Delete ${cfg.displayName} activity`}
+                            aria-label={`Delete ${cfg.displayName} activity`}
+                            data-testid={`delete-activity-${activity.id}`}
+                          >
+                            <Trash2 size={13} />
+                            <span>Delete</span>
+                          </button>
                         </td>
                       </motion.tr>
                     );
@@ -251,8 +295,20 @@ export default function HistoryPage() {
                         <span>{cfg.icon}</span>
                         {cfg.displayName}
                       </div>
-                      <div className="history-card-co2">
-                        {activity.co2Kg.toFixed(2)} kg CO₂
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                        <div className="history-card-co2">
+                          {activity.co2Kg.toFixed(2)} kg CO₂
+                        </div>
+                        <button
+                          type="button"
+                          className="btn-delete-mobile"
+                          onClick={() => setActivityToDelete(activity)}
+                          title={`Delete ${cfg.displayName} activity`}
+                          aria-label={`Delete ${cfg.displayName} activity`}
+                          data-testid={`delete-mobile-${activity.id}`}
+                        >
+                          <Trash2 size={15} />
+                        </button>
                       </div>
                     </div>
                     <div className="history-card-bottom">
@@ -282,6 +338,91 @@ export default function HistoryPage() {
           </div>
         </motion.div>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AnimatePresence>
+        {activityToDelete && (
+          <div
+            className="confirmation-overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-confirm-title"
+            onClick={(e) => {
+              if (e.target === e.currentTarget && !isDeleting) {
+                handleCancelDelete();
+              }
+            }}
+          >
+            <motion.div
+              className="confirmation-dialog"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+            >
+              <div className="confirmation-icon" style={{ color: "var(--color-danger)" }}>
+                <Trash2 size={32} />
+              </div>
+              <h3 id="delete-confirm-title">Delete Activity</h3>
+              <p data-testid="delete-confirmation-message" style={{ marginBottom: "var(--space-md)" }}>
+                Are you sure you want to delete this activity?
+              </p>
+
+              {(() => {
+                const delCfg = ACTIVITY_CONFIGS[activityToDelete.activityType];
+                return (
+                  <div
+                    style={{
+                      padding: "0.75rem 1rem",
+                      background: "rgba(190, 88, 63, 0.07)",
+                      border: "1px solid rgba(190, 88, 63, 0.2)",
+                      borderRadius: "8px",
+                      marginBottom: "var(--space-xl)",
+                      fontSize: "0.85rem",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: "0.5rem",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <span>{delCfg?.icon}</span>
+                      <strong>{delCfg?.displayName}</strong>
+                      <span style={{ color: "var(--color-text-muted)" }}>
+                        ({activityToDelete.quantity} {activityToDelete.unit})
+                      </span>
+                    </div>
+                    <div style={{ fontFamily: "var(--font-mono)", fontWeight: 600, color: "var(--color-danger)" }}>
+                      {activityToDelete.co2Kg.toFixed(2)} kg CO₂
+                    </div>
+                  </div>
+                );
+              })()}
+
+              <div className="confirmation-actions">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={handleCancelDelete}
+                  disabled={isDeleting}
+                  data-testid="delete-cancel"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={handleConfirmDelete}
+                  disabled={isDeleting}
+                  data-testid="delete-confirm"
+                >
+                  {isDeleting ? "Deleting..." : "Delete"}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

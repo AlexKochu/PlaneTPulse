@@ -24,6 +24,14 @@ export async function getActivities(activityType?: string, category?: string) {
   return res.json();
 }
 
+export async function deleteActivity(activityId: number | string) {
+  const res = await fetch(`${API_URL}/api/activities/${activityId}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Failed to delete activity from backend");
+  return res.json();
+}
+
 export async function getDashboardData() {
   const res = await fetch(`${API_URL}/api/dashboard`, { cache: 'no-store' });
   if (!res.ok) throw new Error("Failed to get dashboard data");
