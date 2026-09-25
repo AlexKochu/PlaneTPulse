@@ -295,10 +295,10 @@ planetpulse/
 
 | Environment | URL |
 |-------------|-----|
-| Production (Backend) | `https://planetpulse-backend.onrender.com` |
+| Production (Backend) | `https://planetpulse-zwju.onrender.com` |
 | Production (Frontend) | `https://plane-t-pulse.vercel.app` |
 | Local Development | `http://localhost:8000` |
-| Swagger / OpenAPI Docs | `https://planetpulse-backend.onrender.com/docs` |
+| Swagger / OpenAPI Docs | `https://planetpulse-zwju.onrender.com/docs` |
 
 ### Endpoints
 

@@ -12,9 +12,9 @@ Features are graded **by script** (direct API calls), not by a browser agent dri
 | Environment | URL |
 |---|---|
 | Frontend (Vercel) | `https://plane-t-pulse.vercel.app` |
-| Backend (Render) | `https://planetpulse-backend.onrender.com` |
+| Backend (Render) | `https://planetpulse-zwju.onrender.com` |
 | Local development | `http://localhost:8000` |
-| Swagger / OpenAPI docs | `https://planetpulse-backend.onrender.com/docs` |
+| Swagger / OpenAPI docs | `https://planetpulse-zwju.onrender.com/docs` |
 
 ### All Endpoints
 
